@@ -1,0 +1,47 @@
+{
+  "entities": {
+    "Candidate": {
+      "title": "Candidate",
+      "description": "Candidate profile in the talent database",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "name": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "maxLength": 150 },
+        "skills": { "type": "string", "maxLength": 2000 },
+        "experience": { "type": "string", "maxLength": 100 },
+        "seniority": { "type": "string", "maxLength": 50 },
+        "specialization": { "type": "string", "maxLength": 500 },
+        "portfolio": { "type": "string", "maxLength": 500 },
+        "cv": { "type": "string", "maxLength": 1000 },
+        "cvFileName": { "type": "string", "maxLength": 255 },
+        "cvFileType": { "type": "string", "maxLength": 100 },
+        "cvFileData": { "type": "string", "maxLength": 500000 },
+        "email": { "type": "string", "maxLength": 150 },
+        "whatsapp": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 150 },
+        "country": { "type": "string", "maxLength": 100 },
+        "city": { "type": "string", "maxLength": 100 },
+        "hourlyRate": { "type": "number" },
+        "salaryExpectation": { "type": "number" },
+        "minSalary": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "compensationType": { "type": "string", "maxLength": 50 },
+        "employmentType": { "type": "string", "maxLength": 50 },
+        "compensationNotes": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "maxLength": 50 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 },
+        "updatedBy": { "type": "string", "maxLength": 150 }
+      },
+      "required": ["id", "name", "role"]
+    }
+  },
+  "firestore": {
+    "/candidates/{candidateId}": {
+      "schema": "#/entities/Candidate",
+      "description": "Collection of candidate talent profiles with real-time multi-user synchronization"
+    }
+  }
+}

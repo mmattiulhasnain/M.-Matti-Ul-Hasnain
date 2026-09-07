@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Authorized recruiter email roster
+    function isVerifiedUser() {
+      return isSignedIn() && (
+        request.auth.token.email in [
+          'willianjames584@gmail.com',
+          'animeexploredbest@gmail.com',
+          'bc240412496mmu@vu.edu.pk',
+          'm.mattiulhasnain@gmail.com',
+          'muhium.mujeedi@gmail.com',
+          'mihora.tech@gmail.com',
+          'mmattiulhasnain@gmail.com',
+          'mihoratech@gmail.com'
+        ]
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidCandidate(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 150
+        && data.role is string && data.role.size() > 0 && data.role.size() <= 150
+        && (!('skills' in data) || (data.skills is string && data.skills.size() <= 2000))
+        && (!('experience' in data) || (data.experience is string && data.experience.size() <= 100))
+        && (!('seniority' in data) || (data.seniority is string && data.seniority.size() <= 50))
+        && (!('specialization' in data) || (data.specialization is string && data.specialization.size() <= 500))
+        && (!('email' in data) || (data.email is string && data.email.size() <= 150))
+        && (!('whatsapp' in data) || (data.whatsapp is string && data.whatsapp.size() <= 50))
+        && (!('location' in data) || (data.location is string && data.location.size() <= 150))
+        && (!('country' in data) || (data.country is string && data.country.size() <= 100))
+        && (!('city' in data) || (data.city is string && data.city.size() <= 100))
+        && (!('portfolio' in data) || (data.portfolio is string && data.portfolio.size() <= 500))
+        && (!('cv' in data) || (data.cv is string && data.cv.size() <= 1000))
+        && (!('cvFileName' in data) || (data.cvFileName is string && data.cvFileName.size() <= 255))
+        && (!('cvFileType' in data) || (data.cvFileType is string && data.cvFileType.size() <= 100))
+        && (!('cvFileData' in data) || (data.cvFileData is string && data.cvFileData.size() <= 750000))
+        && (!('currency' in data) || (data.currency is string && data.currency.size() <= 10))
+        && (!('compensationType' in data) || (data.compensationType is string && data.compensationType.size() <= 50))
+        && (!('employmentType' in data) || (data.employmentType is string && data.employmentType.size() <= 50))
+        && (!('compensationNotes' in data) || (data.compensationNotes is string && data.compensationNotes.size() <= 2000))
+        && (!('status' in data) || (data.status is string && data.status.size() <= 50))
+        && (!('pipelineStage' in data) || (data.pipelineStage is string && data.pipelineStage.size() <= 50))
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 2000))
+        && (!('hourlyRate' in data) || data.hourlyRate == null || (data.hourlyRate is number && data.hourlyRate >= 0 && data.hourlyRate <= 5000))
+        && (!('salaryExpectation' in data) || data.salaryExpectation == null || (data.salaryExpectation is number && data.salaryExpectation >= 0 && data.salaryExpectation <= 10000000))
+        && (!('minSalary' in data) || data.minSalary == null || (data.minSalary is number && data.minSalary >= 0 && data.minSalary <= 10000000));
+    }
+
+    match /candidates/{candidateId} {
+      allow get, list: if isVerifiedUser();
+      allow create: if isVerifiedUser() && isValidId(candidateId) && isValidCandidate(request.resource.data);
+      allow update: if isVerifiedUser() && isValidId(candidateId) && isValidCandidate(request.resource.data);
+      allow delete: if isVerifiedUser() && isValidId(candidateId);
+    }
+  }
+}

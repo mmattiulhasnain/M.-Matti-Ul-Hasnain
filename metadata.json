@@ -1,0 +1,8 @@
+{
+  "name": "MIHORA Tech Talent Database",
+  "description": "A database of talent combining CSV and PDF resume data.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
